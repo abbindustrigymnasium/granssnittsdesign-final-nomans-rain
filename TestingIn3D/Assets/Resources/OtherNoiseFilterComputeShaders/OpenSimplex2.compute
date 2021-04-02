@@ -1,0 +1,88 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+#include "../FastNoiseLite.cginc"
+
+StructuredBuffer<float3> vectors;
+RWStructuredBuffer<float> heights;
+RWStructuredBuffer<float> heightsFirstValue;
+
+uint verticesAmount;
+
+fnl_state noise;
+
+uint _seed;
+float _frequency;
+uint _rotationType3D;
+
+uint _fractalType;
+uint _octaves;
+float _lacunarity;
+float _gain;
+float _weightedStrength;
+float _pingPongStrength;
+
+uint _domainWarpType;
+float _amplitude_warp;
+
+float3 _offsett;
+float _minValue;
+float _maxValue;
+float _amplitude;
+float _planetRad;
+float _smoothingMin;
+float _smoothingMax;
+
+bool _invert;
+bool _useFirstLayerAsMask;
+
+float smoothMin(float a, float b, float k) {
+	 k = max(0, k);
+	 float h = max(0, min(1, (b - a + k) / (2 * k)));
+	 return a * h + b * (1 - h) - k * h * (1 - h);
+}
+
+float smoothMax(float a, float b, float k) {
+	 k = min(0, -k);
+	 float h = max(0, min(1, (b - a + k) / (2 * k)));
+	 return a * h + b * (1 - h) - k * h * (1 - h);
+}
+
+[numthreads(512,1,1)]
+void CSMain (uint id : SV_DispatchThreadID)
+{
+	if (id >= verticesAmount)
+	{
+		return;
+	}
+
+	fnl_state noise = fnlCreateState(_seed);
+    noise.frequency = _frequency;
+    noise.noise_type = 0;
+    noise.rotation_type_3d = _rotationType3D;
+
+    noise.fractal_type = _fractalType;
+    noise.octaves = _octaves;
+    noise.lacunarity = _lacunarity;
+    noise.gain = _gain;
+    noise.weighted_strength = _weightedStrength;
+    noise.ping_pong_strength = _pingPongStrength;
+
+    noise.domain_warp_type = _domainWarpType;
+    noise.domain_warp_amp = _amplitude_warp;
+
+	float noiseValue = 0;
+	float pointXRef = vectors[id].x;
+	float pointYRef = vectors[id].y;
+	float pointZRef = vectors[id].z;
+//	fnlDomainWarp3D(noise, pointXRef, pointYRef, pointZRef);
+
+	noiseValue = fnlGetNoise3D(noise, pointXRef + _offsett.x, pointYRef + _offsett.y, pointZRef + _offsett.z);
+	noiseValue = (noiseValue + 1) * 0.5;
+	noiseValue = smoothMin(noiseValue, _maxValue, _smoothingMax);
+	noiseValue = smoothMax(noiseValue, _minValue, _smoothingMin);
+
+	float maskValue = _useFirstLayerAsMask ? heightsFirstValue[id] : 1;
+
+	heights[id] += (_invert ? -noiseValue : noiseValue) * _amplitude * maskValue;
+}

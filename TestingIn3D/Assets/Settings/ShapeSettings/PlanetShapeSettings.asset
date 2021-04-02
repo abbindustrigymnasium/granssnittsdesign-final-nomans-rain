@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f401061ad757984791d62f1d6c9a311, type: 3}
+  m_Name: PlanetShapeSettings
+  m_EditorClassIdentifier: 
+  noiseLayers:
+  - enabled: 1
+    useFirstLayerAsMask: 0
+    terrainSettings:
+      filterType: 0
+      customNoiseSettings:
+        general:
+          amplitude: 1
+          offsett: {x: 4.1, y: -1.74, z: 0.65}
+          minValue: 0.609
+          smoothingMin: 1
+          maxValue: 0.47
+          smoothingMax: 0.08
+          invert: 0
+          seed: 7133
+        generalNoise:
+          noiseType: 0
+          rotationType3D: 1
+          frequency: 0.89
+        fractal:
+          fractalType: 1
+          octaves: 5
+          lacunarity: 2.7
+          gain: 0.31
+          weightedStrength: -0.15
+          pingPongStrength: 3.48
+        cellular:
+          cellularDistanceFunction: 3
+          cellularReturnType: 6
+          jitter: 1
+        domainWarp:
+          domainWarpType: 0
+          rotationType3D: 2
+          amplitude: 0
+          frequency: 0
+        domainWarpFractal:
+          fractalType: 0
+          octaves: 0
+          lacunarity: 0
+          gain: 0
+      shapeNoiseSettings:
+        seed: 1337
+        octaves: 1
+        period: 1
+        persistence: 1
+        lacunarity: 1
+        scale: 1
+        elevation: 1
+        verticalShift: 1
+        Offsett: {x: 0, y: 0, z: 0}
+      detailedNoiseSettings:
+        seed: 1337
+      ridgeNoiseSettings:
+        seed: 1337
+      mountainNoiseSettings:
+        seed: 0
+        weightMultiplier: 0
+        baseRoughness: 0
+        octaves: 1
+        Offsett: {x: 0, y: 0, z: 0}
+        roughness: 0
+        persistence: 0
+        minValue: 0
+        strength: 0
+      cellularNoiseSettings:
+        seed: 1337
+      createrNoiseSettings:
+        seed: 1337
+        numCreaters: 1
+        rimWidth: 0
+        rimSteepness: 0
+        distributionRad: 0
+        radMinMax: {x: 0.05, y: 0.2}
+        distributionFloor: 0
+        floorMinMax: {x: 0.05, y: 0.2}
+        distributionSmoothness: 0
+        smoothnessMinMax: {x: 0.05, y: 0.2}
+  - enabled: 0
+    useFirstLayerAsMask: 1
+    terrainSettings:
+      filterType: 0
+      customNoiseSettings:
+        general:
+          amplitude: 1
+          offsett: {x: 5.49, y: -1.58, z: 0.65}
+          minValue: 0
+          smoothingMin: 0
+          maxValue: 1
+          smoothingMax: 0
+          invert: 0
+          seed: 1
+        generalNoise:
+          noiseType: 2
+          rotationType3D: 1
+          frequency: 1
+        fractal:
+          fractalType: 2
+          octaves: 5
+          lacunarity: 3.21
+          gain: 0.26
+          weightedStrength: 1
+          pingPongStrength: 1.5
+        cellular:
+          cellularDistanceFunction: 1
+          cellularReturnType: 6
+          jitter: 1
+        domainWarp:
+          domainWarpType: 0
+          rotationType3D: 2
+          amplitude: 0
+          frequency: 0
+        domainWarpFractal:
+          fractalType: 0
+          octaves: 0
+          lacunarity: 0
+          gain: 0
+      shapeNoiseSettings:
+        seed: 1337
+        octaves: 1
+        period: 1
+        persistence: 1
+        lacunarity: 1
+        scale: 1
+        elevation: 1
+        verticalShift: 1
+        Offsett: {x: 0, y: 0, z: 0}
+      detailedNoiseSettings:
+        seed: 1337
+      ridgeNoiseSettings:
+        seed: 1337
+      mountainNoiseSettings:
+        seed: 0
+        weightMultiplier: 0
+        baseRoughness: 0
+        octaves: 1
+        Offsett: {x: 0, y: 0, z: 0}
+        roughness: 0
+        persistence: 0
+        minValue: 0
+        strength: 0
+      cellularNoiseSettings:
+        seed: 1337
+      createrNoiseSettings:
+        seed: 1337
+        numCreaters: 1
+        rimWidth: 0
+        rimSteepness: 0
+        distributionRad: 0
+        radMinMax: {x: 0.05, y: 0.2}
+        distributionFloor: 0
+        floorMinMax: {x: 0.05, y: 0.2}
+        distributionSmoothness: 0
+        smoothnessMinMax: {x: 0.05, y: 0.2}

@@ -1,0 +1,57 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+StructuredBuffer<float3> vectors;
+RWStructuredBuffer<float> heights;
+uint verticesAmount;
+
+struct Creater
+{
+	float3 centre;
+	float radius;
+	float floor;
+	float smoothness;
+};
+StructuredBuffer<Creater> creaters;
+int numCreaters;
+
+float rimSteepness;
+float rimWidth;
+
+float smoothMin(float a, float b, float k) {
+	 k = max(0, k);
+	 float h = max(0, min(1, (b - a + k) / (2 * k)));
+	 return a * h + b * (1 - h) - k * h * (1 - h);
+}
+
+float smoothMax(float a, float b, float k) {
+	 k = min(0, -k);
+	 float h = max(0, min(1, (b - a + k) / (2 * k)));
+	 return a * h + b * (1 - h) - k * h * (1 - h);
+}
+
+[numthreads(512,1,1)]
+void CSMain (uint id : SV_DispatchThreadID)
+{
+	if (id >= verticesAmount)
+	{
+		return;
+	}
+
+	float createrHeight = 0;
+
+	for (int i = 0; i < numCreaters; i++)
+	{
+		float x = length(vectors[id] - creaters[i].centre) / max(creaters[i].radius, 0.0001);
+
+		float cavity = x * x - 1;
+		float rimX = min(x - 1 - rimWidth, 0);
+		float rim = rimSteepness * rimX * rimX;
+
+		float createrShape = smoothMax(cavity, creaters[i].floor, creaters[i].smoothness);
+		createrShape = smoothMin(createrShape, rim, creaters[i].smoothness);
+		createrHeight += createrShape * creaters[i].radius;
+	}
+
+	heights[id] += createrHeight;
+}

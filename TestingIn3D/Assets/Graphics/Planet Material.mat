@@ -1,0 +1,157 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3813652144741237116
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 2
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Planet Material
+  m_Shader: {fileID: 4800000, guid: 4cca0ccb6952f6a4cb05966fa165fc82, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 704a7dd4e9346e94ea4380e9840f96b7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapA:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapB:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapNoiseBreakof:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AlphaClip: 0
+    - _Blend: 0
+    - _BlendSharpness: 1
+    - _BodyScale: 1
+    - _BumpScale: 1
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DampShoreHeightAboveWater: 0.023
+    - _DryShoreHeightAboveWater: 0.076
+    - _DstBlend: 0
+    - _EnvironmentReflections: 1
+    - _FlatToSteepBlend: 0.07
+    - _FlatToSteepNoise: 0.06
+    - _FresnelPow: 12
+    - _FresnelStrengthFar: 0
+    - _FresnelStrengthNear: 0
+    - _GlossMapScale: 0
+    - _Glossiness: 0
+    - _GlossyReflections: 0
+    - _MaxFlatHeight: 0.5
+    - _Metallic: 0
+    - _NoiseScale: 1
+    - _NoiseScale2: 5
+    - _NormalMapStrength: 1
+    - _OcclusionStrength: 1
+    - _OceanBlend: 0.083
+    - _OceanRadius: 7.8
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _ScaleNoise: 1
+    - _ScaleNormalMapA: 1
+    - _ScaleNormalMapB: 1
+    - _ScaleTexture: 1
+    - _ShoreBlend: 0.065
+    - _ShoreHeightMax: 8.5
+    - _ShoreHeightMin: 0.09
+    - _Smoothness: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _SteepBandStrength: 0.55
+    - _SteepBands: 2.5
+    - _SteepnessThreshold: 0.15
+    - _Surface: 0
+    - _TerrainHeightThreshold: 0
+    - _WorkflowMode: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BiomeAHigh: {r: 0.12437701, g: 0.6132076, b: 0.31325904, a: 1}
+    - _BiomeALow: {r: 0, g: 1, b: 0.15068698, a: 1}
+    - _BiomeBHigh: {r: 0.023673896, g: 0.26415092, b: 0.19141407, a: 1}
+    - _BiomeBLow: {r: 0.0028034954, g: 0.5943396, b: 0.41978788, a: 1}
+    - _BiomeCHigh: {r: 0.7783019, g: 1, b: 0.99094856, a: 1}
+    - _BiomeCLow: {r: 1, g: 1, b: 1, a: 1}
+    - _BiomeDHigh: {r: 0.5283019, g: 0.3540839, b: 0.062299743, a: 1}
+    - _BiomeDLow: {r: 0.8396226, g: 0.5865177, b: 0.17030083, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DampShoreColor: {r: 0.8490566, g: 0.7833133, b: 0.46057317, a: 1}
+    - _DryShoreColor: {r: 0.8470589, g: 0.8196079, b: 0.6901961, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresnelCol: {r: 0.96470594, g: 1, b: 0.57254905, a: 1}
+    - _MountainHigh: {r: 0.14901961, g: 0.06666667, b: 0, a: 1}
+    - _MountainLow: {r: 0.5294118, g: 0.4901961, b: 0.18823531, a: 1}
+    - _OceanDeep: {r: 0, g: 0.14819343, b: 0.754717, a: 1}
+    - _OceanShallow: {r: 0.5707547, g: 0.9016919, b: 1, a: 1}
+    - _ShoreColorHigh: {r: 0.95294124, g: 0.9058824, b: 0.3803922, a: 1}
+    - _ShoreColorLow: {r: 0.9803922, g: 1, b: 0.6666667, a: 1}
+    - _ShoreHeightMinMax: {r: 29.04, g: 122.45, b: 1, a: 1}
+    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _SteepHigh: {r: 0.2735849, g: 0.14771326, b: 0.0761392, a: 1}
+    - _SteepLow: {r: 0.509434, g: 0.31009662, b: 0.19464225, a: 1}
+    - _TestColor: {r: 0.11683603, g: 0.6509434, b: 0, a: 1}
+    - _TestParams: {r: 0, g: 0, b: 0, a: 0}

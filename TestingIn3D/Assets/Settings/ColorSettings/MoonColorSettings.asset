@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7d61d747c791b41ad34ab9f572102c, type: 3}
+  m_Name: MoonColorSettings
+  m_EditorClassIdentifier: 
+  celestialBodyMaterial: {fileID: 2100000, guid: 06912228ae2c51641ba6def89546b250,
+    type: 2}
+  shore:
+    DampShoreColor: {r: 1, g: 1, b: 1, a: 1}
+    DryShoreColor: {r: 1, g: 1, b: 1, a: 1}
+    OceanRadius: 0
+    DampShoreHeightAboveWater: 0.1
+    DryShoreHeightAboveWater: 0.1
+    ShoreBlend: 0
+  biomes:
+    BiomeALow: {r: 0, g: 0, b: 0, a: 0}
+    BiomeAHigh: {r: 0, g: 0, b: 0, a: 0}
+    BiomeBLow: {r: 0, g: 0, b: 0, a: 0}
+    BiomeBHigh: {r: 0, g: 0, b: 0, a: 0}
+    BiomeCLow: {r: 0, g: 0, b: 0, a: 0}
+    BiomeCHigh: {r: 0, g: 0, b: 0, a: 0}
+    BiomeDLow: {r: 0, g: 0, b: 0, a: 0}
+    BiomeDHigh: {r: 0, g: 0, b: 0, a: 0}
+    FlatColBlend: 0
+    FlatColBlendNoise: 0
+    MaxFlatHeight: 0
+    NoiseTex: {fileID: 0}
+    NoiseScale: 0
+    NoiseScale2: 0
+  mountains:
+    MountainLow: {r: 0, g: 0, b: 0, a: 0}
+    MountainHigh: {r: 0, g: 0, b: 0, a: 0}
+    MaxFlatHeight: 0
+    SteepnessThreshold: 0
+    FlatToSteepBlend: 0
+    FlatToSteepNoise: 0
+  materialProperties:
+    FresnelCol: {r: 0, g: 0, b: 0, a: 0}
+    FresnelStrengthNear: 0
+    FresnelStrengthFar: 0
+    FresnelPow: 0
+    Smoothness: 0
+    Metallic: 0
+    BodyScale: 0
+    TestParams: {x: 0, y: 0, z: 0, w: 0}
