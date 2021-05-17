@@ -12,44 +12,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e7d61d747c791b41ad34ab9f572102c, type: 3}
   m_Name: SunColorSettings
   m_EditorClassIdentifier: 
-  celestialBodyMaterial: {fileID: 2100000, guid: 62f09872b1c9d4d40928a807a932182b,
-    type: 2}
-  shore:
-    DampShoreColor: {r: 1, g: 1, b: 1, a: 1}
-    DryShoreColor: {r: 1, g: 1, b: 1, a: 1}
-    OceanRadius: 5
-    DampShoreHeightAboveWater: 0.1
-    DryShoreHeightAboveWater: 0.1
-    OceanBlend: 0.5
-    ShoreBlend: 0.5
-  biomes:
-    BiomeALow: {r: 0, g: 0, b: 0, a: 0}
-    BiomeAHigh: {r: 0, g: 0, b: 0, a: 0}
-    BiomeBLow: {r: 0, g: 0, b: 0, a: 0}
-    BiomeBHigh: {r: 0, g: 0, b: 0, a: 0}
-    BiomeCLow: {r: 0, g: 0, b: 0, a: 0}
-    BiomeCHigh: {r: 0, g: 0, b: 0, a: 0}
-    BiomeDLow: {r: 0, g: 0, b: 0, a: 0}
-    BiomeDHigh: {r: 0, g: 0, b: 0, a: 0}
-    FlatColBlend: 0
-    FlatColBlendNoise: 0
-    MaxFlatHeight: 0
-    NoiseTex: {fileID: 0}
-    NoiseScale: 0
-    NoiseScale2: 0
-  mountains:
-    MountainLow: {r: 0, g: 0, b: 0, a: 0}
-    MountainHigh: {r: 0, g: 0, b: 0, a: 0}
-    MaxFlatHeight: 0
-    SteepnessThreshold: 0
-    FlatToSteepBlend: 0
-    FlatToSteepNoise: 0
-  materialProperties:
-    FresnelCol: {r: 0, g: 0, b: 0, a: 0}
-    FresnelStrengthNear: 0
-    FresnelStrengthFar: 0
-    FresnelPow: 0
-    Smoothness: 0
-    Metallic: 0
-    BodyScale: 0
-    TestParams: {x: 0, y: 0, z: 0, w: 0}
+  planetType: 3
+  firstPlanet:
+    celestialBodyMaterial: {fileID: 0}
+    ocean:
+      OceanDeep: {r: 0, g: 0, b: 0, a: 0}
+      OceanShallow: {r: 0, g: 0, b: 0, a: 0}
+      OceanRadius: 0
+      DepthMultiplier: 0
+      AlphaMultiplier: 0
+      Smoothness: 0
+      SelfGlow: 0
+      WaveSpeed: 0
+      WaveNormalA: {fileID: 0}
+      WaveNormalB: {fileID: 0}
+      WaveNormalScale: 0
+      WaveStrength: 0
+      SpecularCol: {r: 0, g: 0, b: 0, a: 0}
+    atmosphere:
+      atmosphereRadius: 0
+      numInScatteringPoints: 0
+      numOpticalDepthPoints: 0
+      scatteringCoefficients: {x: 0, y: 0, z: 0}
+      scatteringStrength: 0
+      densityFalloff: 0
+    shore:
+      BlendSharpness: 0
+      ScaleNormalMap: 0
+      NormalMap: {fileID: 0}
+      DryShoreColor: {r: 1, g: 1, b: 1, a: 1}
+      DampShoreColor: {r: 1, g: 1, b: 1, a: 1}
+      DryShoreHeightAboveWater: 0.1
+      DampShoreHeightAboveWater: 0.1
+      OceanBlend: 0.5
+      ShoreBlend: 0.5
+    biomes:
+      BlendSharpness: 0
+      ScaleNormalMap: 0
+      NormalMap: {fileID: 0}
+      BiomeALow: {r: 0, g: 0, b: 0, a: 0}
+      BiomeAHigh: {r: 0, g: 0, b: 0, a: 0}
+      BiomeHeightAboveShore: 0
+      FlatColBlend: 0
+    mountains:
+      BlendSharpness: 0
+      ScaleNormalMap: 0
+      NormalMap: {fileID: 0}
+      MountainLow: {r: 0, g: 0, b: 0, a: 0}
+      MountainHigh: {r: 0, g: 0, b: 0, a: 0}
+      MaxFlatHeight: 0
+      MountainTopBlend: 0
+      SteepnessThresholdLow: 0
+      SteepnessThresholdHigh: 0
+      MountainBlend: 0
+      HighUpMountainSteepnessDistribution: 0
+  secondPlanet:
+    celestialBodyMaterial: {fileID: 0}
+    ocean:
+      OceanDeep: {r: 1, g: 1, b: 1, a: 1}
+      OceanShallow: {r: 1, g: 1, b: 1, a: 1}
+      OceanRadius: 0
+      DepthMultiplier: 0
+      AlphaMultiplier: 0
+      Smoothness: 0
+      SelfGlow: 0
+      WaveSpeed: 0
+      WaveNormalA: {fileID: 0}
+      WaveNormalB: {fileID: 0}
+      WaveNormalScale: 0
+      WaveStrength: 0
+      SpecularCol: {r: 0, g: 0, b: 0, a: 0}
+    atmosphere:
+      atmosphereRadius: 0
+      numInScatteringPoints: 0
+      numOpticalDepthPoints: 0
+      scatteringCoefficients: {x: 0, y: 0, z: 0}
+      scatteringStrength: 0
+      densityFalloff: 0
+  moon:
+    celestialBodyMaterial: {fileID: 0}
+    normalMap:
+      NormalMapTexture: {fileID: 0}
+      BlendSharpness: 0
+      ScaleNormalMap: 0
+  sun:
+    celestialBodyMaterial: {fileID: 0}
+    _SunColorUndertone: {r: 0.6698113, g: 0.14197089, b: 0, a: 1}
+    _SunColorMidtone: {r: 0.98039216, g: 0.5765989, b: 0.3058824, a: 1}
+    _SunColorOvertone: {r: 1, g: 1, b: 0.5568628, a: 1}

@@ -5,7 +5,6 @@
 
 StructuredBuffer<float3> vectors;
 RWStructuredBuffer<float> heights;
-StructuredBuffer<float> heightsFirstValue;
 
 uint verticesAmount;
 
@@ -55,6 +54,7 @@ void CSMain (uint id : SV_DispatchThreadID)
 	{
 		return;
 	}
+	float heightOrigin = heights[id];
 
 	fnl_state noise = fnlCreateState(_seed);
     noise.frequency = _frequency;
@@ -82,7 +82,7 @@ void CSMain (uint id : SV_DispatchThreadID)
 	noiseValue = smoothMin(noiseValue, _maxValue, _smoothingMax);
 	noiseValue = smoothMax(noiseValue, _minValue, _smoothingMin);
 	
-	float maskValue = _useFirstLayerAsMask ? heightsFirstValue[id] : 1;
+//	float maskValue = _useFirstLayerAsMask ? heightsFirstValue[id] : 1;
 
-	heights[id] += (_invert ? -noiseValue : noiseValue) * _amplitude * maskValue;
+	heights[id] = (_invert ? -noiseValue : noiseValue) * _amplitude * heightOrigin;
 }

@@ -5,7 +5,6 @@
 
 StructuredBuffer<float3> vectors;
 RWStructuredBuffer<float> heights;
-RWStructuredBuffer<float> heightsFirstValue;
 
 uint verticesAmount;
 
@@ -55,6 +54,7 @@ void CSMain (uint id : SV_DispatchThreadID)
 	{
 		return;
 	}
+	float heightOrigin = heights[id];
 
 	fnl_state noise = fnlCreateState(_seed);
     noise.frequency = _frequency;
@@ -75,14 +75,26 @@ void CSMain (uint id : SV_DispatchThreadID)
 	float pointXRef = vectors[id].x;
 	float pointYRef = vectors[id].y;
 	float pointZRef = vectors[id].z;
+
 //	fnlDomainWarp3D(noise, pointXRef, pointYRef, pointZRef);
+
+/**
+ * 3D warps the input position using current domain warp settings.
+ * 
+ * Example usage with fnlGetNoise3D:
+ * ```
+ * fnlDomainWarp3D(state, x, y, z);
+ * noise = fnlGetNoise3D(state, x, y, z);
+ * ```
+ */
+//void fnlDomainWarp3D(fnl_state state, inout FNLfloat x, inout FNLfloat y, inout FNLfloat z);
 
 	noiseValue = fnlGetNoise3D(noise, pointXRef + _offsett.x, pointYRef + _offsett.y, pointZRef + _offsett.z);
 	noiseValue = (noiseValue + 1) * 0.5;
 	noiseValue = smoothMin(noiseValue, _maxValue, _smoothingMax);
 	noiseValue = smoothMax(noiseValue, _minValue, _smoothingMin);
 
-	float maskValue = _useFirstLayerAsMask ? heightsFirstValue[id] : 1;
+//	float maskValue = _useFirstLayerAsMask ? heightsFirstValue[id] : 1;
 
-	heights[id] += (_invert ? -noiseValue : noiseValue) * _amplitude * maskValue;
+	heights[id] = (_invert ? -noiseValue : noiseValue) * _amplitude * heightOrigin;
 }

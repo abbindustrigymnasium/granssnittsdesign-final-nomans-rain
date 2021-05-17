@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2609807490396865801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2609807490396865798}
+  - component: {fileID: 2609807490396865799}
+  m_Layer: 0
+  m_Name: Asteroid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2609807490396865798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609807490396865801}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2609807490396865799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2609807490396865801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e780b652bf0ca1246b46a7019f7503bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Notes: 
+  colorSettings: {fileID: 11400000, guid: 44b972a47f7978848afe7e076e6e7c30, type: 2}
+  sphereSettings: {fileID: 11400000, guid: 9ff86843173dede4495a574163cd3cff, type: 2}
+  shapeSettings: {fileID: 11400000, guid: 26716b20c29345c4ca50d766a14335f3, type: 2}
+  faunaSettings: {fileID: 11400000, guid: c6f36e200c66ff7429f166a913841698, type: 2}
+  colorSettingsFoldout: 1
+  sphereSettingsFoldout: 1
+  terrainSettingsFoldout: 1
+  faunaSettingsFoldout: 1
+  planetMaterial: {fileID: 0}
+  oceanRadius: 0
+  noiseTextures:
+  - {fileID: 0}
+  - {fileID: 0}
+  layer: 0

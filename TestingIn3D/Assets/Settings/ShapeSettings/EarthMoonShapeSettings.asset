@@ -1,0 +1,195 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f401061ad757984791d62f1d6c9a311, type: 3}
+  m_Name: EarthMoonShapeSettings
+  m_EditorClassIdentifier: 
+  noiseLayers:
+  - enabled: 1
+    terrainSettings:
+      filterType: 0
+      customNoiseSettings:
+        noiseTextureSample: {fileID: 0}
+        mask:
+          general:
+            randomizeOnStart: 0
+            seed: 1337
+            amplitude: 0.1
+            offsett: {x: 0, y: 0, z: 0}
+            minValue: 0
+            smoothingMin: 0
+            maxValue: 0
+            smoothingMax: 0
+            invert: 0
+          generalNoise:
+            noiseType: 0
+            rotationType3D: 0
+            frequency: 0.02
+          fractal:
+            fractalType: 0
+            octaves: 1
+            lacunarity: 2
+            gain: 0.5
+            weightedStrength: 0
+            pingPongStrength: 2
+          cellular:
+            cellularDistanceFunction: 0
+            cellularReturnType: 0
+            jitter: 1
+          domainWarp:
+            domainWarpType: 0
+            rotationType3D: 0
+            amplitude: 30
+            frequency: 0.005
+          domainWarpFractal:
+            fractalType: 0
+            octaves: 5
+            lacunarity: 2
+            gain: 0.5
+          useMask: 0
+        noise:
+          general:
+            randomizeOnStart: 1
+            seed: 1337
+            amplitude: 1
+            offsett: {x: 0, y: 0, z: 0}
+            minValue: 0.633
+            smoothingMin: 1
+            maxValue: 0.319
+            smoothingMax: 1
+            invert: 0
+          generalNoise:
+            noiseType: 0
+            rotationType3D: 1
+            frequency: 1.5
+          fractal:
+            fractalType: 1
+            octaves: 5
+            lacunarity: 1.08
+            gain: 0.31
+            weightedStrength: 4.94
+            pingPongStrength: 1
+          cellular:
+            cellularDistanceFunction: 1
+            cellularReturnType: 6
+            jitter: 1
+          domainWarp:
+            domainWarpType: 0
+            rotationType3D: 0
+            amplitude: 0
+            frequency: 0
+          domainWarpFractal:
+            fractalType: 0
+            octaves: 0
+            lacunarity: 0
+            gain: 0
+      createrNoiseSettings:
+        randomizeOnStart: 0
+        seed: 0
+        numCreaters: 1
+        rimWidth: 1
+        rimSteepness: 1
+        distributionRad: 0
+        radMinMax: {x: 0, y: 1}
+        distributionFloor: 0
+        floorMinMax: {x: 0.05, y: 0.2}
+        distributionSmoothness: 0
+        smoothnessMinMax: {x: 0.05, y: 0.2}
+  - enabled: 1
+    terrainSettings:
+      filterType: 1
+      customNoiseSettings:
+        noiseTextureSample: {fileID: 0}
+        mask:
+          general:
+            randomizeOnStart: 0
+            seed: 1337
+            amplitude: 0.1
+            offsett: {x: 0, y: 0, z: 0}
+            minValue: 0
+            smoothingMin: 0
+            maxValue: 0
+            smoothingMax: 0
+            invert: 0
+          generalNoise:
+            noiseType: 0
+            rotationType3D: 0
+            frequency: 0.02
+          fractal:
+            fractalType: 0
+            octaves: 1
+            lacunarity: 2
+            gain: 0.5
+            weightedStrength: 0
+            pingPongStrength: 2
+          cellular:
+            cellularDistanceFunction: 0
+            cellularReturnType: 0
+            jitter: 1
+          domainWarp:
+            domainWarpType: 0
+            rotationType3D: 0
+            amplitude: 30
+            frequency: 0.005
+          domainWarpFractal:
+            fractalType: 0
+            octaves: 5
+            lacunarity: 2
+            gain: 0.5
+          useMask: 0
+        noise:
+          general:
+            randomizeOnStart: 0
+            seed: 1337
+            amplitude: 1
+            offsett: {x: 0, y: 0, z: 0}
+            minValue: 0.633
+            smoothingMin: 1
+            maxValue: 0.319
+            smoothingMax: 1
+            invert: 0
+          generalNoise:
+            noiseType: 0
+            rotationType3D: 1
+            frequency: 1.5
+          fractal:
+            fractalType: 1
+            octaves: 5
+            lacunarity: 1.08
+            gain: 0.31
+            weightedStrength: 4.94
+            pingPongStrength: 1
+          cellular:
+            cellularDistanceFunction: 1
+            cellularReturnType: 6
+            jitter: 1
+          domainWarp:
+            domainWarpType: 0
+            rotationType3D: 0
+            amplitude: 30
+            frequency: 0.005
+          domainWarpFractal:
+            fractalType: 0
+            octaves: 5
+            lacunarity: 2
+            gain: 0.5
+      createrNoiseSettings:
+        randomizeOnStart: 1
+        seed: 0
+        numCreaters: 250
+        rimWidth: 1
+        rimSteepness: 0.5
+        distributionRad: 0.7
+        radMinMax: {x: 0.01, y: 0.2}
+        distributionFloor: -0.101
+        floorMinMax: {x: 0.25, y: 1}
+        distributionSmoothness: 0
+        smoothnessMinMax: {x: 0.25, y: 2}

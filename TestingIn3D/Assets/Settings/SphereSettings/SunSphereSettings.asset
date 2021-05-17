@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 701cfd3e6f53b5740a9343d568deea7e, type: 3}
   m_Name: SunSphereSettings
   m_EditorClassIdentifier: 
-  resolution: 5
+  resolution: 2
+  customResolution: 1
   planetRadius: 15
   mass: 2e+21
   initialVelocity: {x: 0, y: 0, z: 0}

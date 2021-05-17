@@ -1,9 +1,9 @@
-﻿Shader "Hidden/Ocean Shader"
+﻿Shader "Planet/Ocean"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-
+		/*
 		_OceanRadius ("Ocean Radius", float) = 1
 		_OceanDeep ("Ocean Deep", Color) = (1,1,1,1)
 		_OceanShallow ("Ocean Shallow", Color) = (1,1,1,1)
@@ -11,12 +11,13 @@
 		_AlphaMultiplier ("Alpha Multiplier", float) = 60
 		_Smoothness ("Smoothness", Range(0,1)) = 1
 		
+		_OceanGlow("Ocean Glow", float) = 1
+
 		_Frequency("Frequency", float) = 2
-		_WaveSpeed("Wave Speed", float) = 2000
+		_WaveSpeed("Wave Speed", float) = 2000*/
     }
     SubShader
     {
-        // No culling or depth
         Cull Off ZWrite Off ZTest Always
 
         Pass
@@ -32,18 +33,38 @@
 			uniform fixed _DepthLevel;
 			uniform float4 _MainTex_TexelSize;
 
-			float4 _OceanDeep;
-            float4 _OceanShallow;
-			float _OceanRadius;
-			float _DepthMultiplier;
-			float _AlphaMultiplier;
+			static const int maxNumSpheres = 10;
+			float4 _OceanDeep[maxNumSpheres];
+            float4 _OceanShallow[maxNumSpheres];
+			float _OceanRadius[maxNumSpheres];
+			float _DepthMultiplier[maxNumSpheres];
+			float _AlphaMultiplier[maxNumSpheres];
+			float4 _DirToSun[maxNumSpheres];
 
-			float _Smoothness;
+			float _Smoothness[maxNumSpheres];
 
-			float3 _OceanCentre;
+			//float3 _OceanCentre;
+			float4 _OceanCentre[maxNumSpheres];
+			int _NumOceans;
 
-			float _Frequency;
+			//float3 _SunCentre;
+
+			//float _OceanGlow;
+
+			/*float _Frequency;
+			float _WaveSpeed;*/
+
+			/*
 			float _WaveSpeed;
+			sampler2D _WaveNormalA;
+			float _WaveNormalScale;
+			sampler2D _WaveNormalB;
+			float _WaveStrength;
+			*/
+			float4 _SpecularCol[maxNumSpheres];
+			
+
+			float _SelfGlow[maxNumSpheres];
 
             struct input
             {
@@ -93,6 +114,54 @@
 				return float2(3.402823466e+38, 0);
 			}
 
+			float3 blend_rnm(float3 n1, float3 n2)
+			{
+				n1.z += 1;
+				n2.xy = -n2.xy;
+
+				return n1 * dot(n1, n2) / n1.z - n2;
+			}
+
+			float3 triplanarNormal(float3 vertPos, float3 normal, float3 scale, float2 offset, sampler2D normalMap) {
+				float3 absNormal = abs(normal);
+
+				// Calculate triplanar blend
+				float3 blendWeight = saturate(pow(normal, 4));
+				// Divide blend weight by the sum of its components. This will make x + y + z = 1
+				blendWeight /= dot(blendWeight, 1);
+
+				// Calculate triplanar coordinates
+				float2 uvX = vertPos.zy * scale + offset;
+				float2 uvY = vertPos.xz * scale + offset;
+				float2 uvZ = vertPos.xy * scale + offset;
+
+				// Sample tangent space normal maps
+				// UnpackNormal puts values in range [-1, 1] (and accounts for DXT5nm compression)
+				float3 tangentNormalX = UnpackNormal(tex2D(normalMap, uvX));
+				float3 tangentNormalY = UnpackNormal(tex2D(normalMap, uvY));
+				float3 tangentNormalZ = UnpackNormal(tex2D(normalMap, uvZ));
+
+				// Swizzle normals to match tangent space and apply reoriented normal mapping blend
+				tangentNormalX = blend_rnm(half3(normal.zy, absNormal.x), tangentNormalX);
+				tangentNormalY = blend_rnm(half3(normal.xz, absNormal.y), tangentNormalY);
+				tangentNormalZ = blend_rnm(half3(normal.xy, absNormal.z), tangentNormalZ);
+
+				// Apply input normal sign to tangent space Z
+				float3 axisSign = sign(normal);
+				tangentNormalX.z *= axisSign.x;
+				tangentNormalY.z *= axisSign.y;
+				tangentNormalZ.z *= axisSign.z;
+
+				// Swizzle tangent normals to match input normal and blend together
+				float3 outputNormal = normalize(
+					tangentNormalX.zyx * blendWeight.x +
+					tangentNormalY.xzy * blendWeight.y +
+					tangentNormalZ.xyz * blendWeight.z
+				);
+
+				return outputNormal;
+			}
+
             fixed4 frag (output o) : SV_Target
             {
 				fixed4 originalCol = tex2D(_MainTex, o.uv);
@@ -104,52 +173,58 @@
 				float nonlin_depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, o.uv);
 				float sceneDepth = LinearEyeDepth(nonlin_depth) * viewLength;
 
-				float2 hitInfo = raySphere(_OceanCentre, _OceanRadius, rayPos, rayDir);
-				float dstToOcean = hitInfo.x;
-				float dstThroughOcean = hitInfo.y;
-				float3 rayOceanIntersectPos = rayPos + rayDir * dstToOcean - _OceanCentre;
+				//float3 dirToSun = _WorldSpaceLightPos0.xyz;
+				float3 clipPlanePos = rayPos + o.viewVector * _ProjectionParams.y;
 
-				// dst that view ray travels through ocean (before hitting terrain / exiting ocean)
-				float oceanViewDepth = min(dstThroughOcean, sceneDepth - dstToOcean);
+				for (int sphereIndex = 0; sphereIndex < _NumOceans; sphereIndex ++) {
 
-				if (oceanViewDepth > 0){
-//					float oneMinusDot = 1.0 - dot(_WorldSpaceLightPos0.xyz, _OceanCentre);
-//					float dirToSun = pow(oneMinusDot, 5.0);
+					float2 hitInfo = raySphere(_OceanCentre[sphereIndex].xyz, _OceanRadius[sphereIndex], rayPos, rayDir);
+					float dstToOcean = hitInfo.x;
+					float dstThroughOcean = hitInfo.y;
+					float3 rayOceanIntersectPos = rayPos + rayDir * dstToOcean - _OceanCentre[sphereIndex].xyz;
 
-					//float3 dirToSun = -normalize(_OceanCentre);//FOR POINT LIGHT;
-					float3 dirToSun = _WorldSpaceLightPos0.xyz; //FOR DIRECTIONAL LIGHT
+					// dst that view ray travels through ocean (before hitting terrain / exiting ocean)
+					float oceanViewDepth = min(dstThroughOcean, sceneDepth - dstToOcean);
 
-					float opticalDepth01 = 1 - exp(-oceanViewDepth * _DepthMultiplier);
-					float alpha = 1 - exp(-oceanViewDepth * _AlphaMultiplier);
+					if (oceanViewDepth > 0){
+						float dstAboveWater = length(clipPlanePos - _OceanCentre[sphereIndex].xyz) - _OceanRadius[sphereIndex];
 
-					float3 oceanNormal = normalize(rayPos + rayDir * dstToOcean - _OceanCentre);
+						float opticalDepth01 = 1 - exp(-oceanViewDepth * _DepthMultiplier[sphereIndex]);
+						float alpha = 1 - exp(-oceanViewDepth * _AlphaMultiplier[sphereIndex]);
 
-					float specularAngle = acos(dot(normalize(dirToSun - rayDir), oceanNormal));
+						float3 oceanNormal = normalize(rayPos + rayDir * dstToOcean - _OceanCentre[sphereIndex].xyz);
+						float3 oceanSphereNormal = normalize(rayOceanIntersectPos);
 
-/*					// noise on this shit
-					fnl_state noise = fnlCreateState();
-					noise.frequency = _Frequency;
-					specularAngle *= (1 + fnlGetNoise3D(noise, o.pos.x, o.pos.y+_Time[0]*_WaveSpeed/(length(rayPos - _OceanCentre)), o.pos.z)*0.5);
-*/
-					float specularExponent = specularAngle / (1-_Smoothness);
-					float specularHighlight = exp(-specularExponent * specularExponent);
+						/*
+						float2 waveOffsetA = float2(_Time.x * _WaveSpeed, _Time.x * _WaveSpeed * 0.8);
+						float2 waveOffsetB = float2(_Time.x * _WaveSpeed * - 0.8, _Time.x * _WaveSpeed * -0.3);
+						float3 waveNormal = triplanarNormal(rayOceanIntersectPos, oceanSphereNormal, _WaveNormalScale, waveOffsetA, _WaveNormalA);
+						waveNormal = triplanarNormal(rayOceanIntersectPos, waveNormal, _WaveNormalScale, waveOffsetB, _WaveNormalB);
+						waveNormal = normalize(lerp(oceanSphereNormal, waveNormal, _WaveStrength));
+					
+						float diffuseLighting = saturate(dot(oceanSphereNormal, dirToSun));
+						float specularAngle = acos(dot(normalize(dirToSun - rayDir), waveNormal));
+						float specularExponent = specularAngle / (1 - _Smoothness);
+						float specularHighlight = exp(-specularExponent * specularExponent);
+					*/
+				
+						float specularAngle = acos(dot(normalize(_DirToSun[sphereIndex].xyz - rayDir), oceanNormal));
+					
+						// noise on this shit
+						//fnl_state noise = fnlCreateState();
+						//noise.frequency = _Frequency;
+						//specularAngle *= (1 + fnlGetNoise3D(noise, o.pos.x, o.pos.y+_Time[0]*_WaveSpeed/(length(rayPos - _OceanCentre)), o.pos.z)*0.5);
+					
+						float specularExponent = specularAngle / (1-_Smoothness[sphereIndex]);
+						float specularHighlight = exp(-specularExponent * specularExponent);
 
-					float diffuseLightning = saturate(dot(oceanNormal, dirToSun));
-
-					float4 oceanCol = lerp(_OceanShallow, _OceanDeep, opticalDepth01) * diffuseLightning + specularHighlight;
-					return lerp(originalCol, oceanCol, alpha);
+						float diffuseLighting = (_SelfGlow[sphereIndex]) ? 1 : saturate(dot(oceanSphereNormal, _DirToSun[sphereIndex].xyz));
+				
+						float4 oceanCol = lerp(_OceanShallow[sphereIndex], _OceanDeep[sphereIndex], opticalDepth01) * diffuseLighting + (specularHighlight * (dstAboveWater > 0) * _SpecularCol[sphereIndex]);
+						return lerp(originalCol, oceanCol, alpha);
+					}
 				}
 				return originalCol;
-				
-//				fixed4 originalCol = tex2D(_MainTex, i.uv);
-
-/*				float3 rayPos = _WorldSpaceCameraPos;
-				float viewLength = length(i.viewVector);
-				float3 rayDir = i.viewVector / viewLength;*/
-/*
-				float nonlin_depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv);
-				float sceneDepth = LinearEyeDepth(nonlin_depth) * length(i.viewVector);
-				return sceneDepth/10;*/
             }
             ENDCG
         }

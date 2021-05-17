@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 1337
   numStars: 5000
-  distanceRadius: 1500
-  starRadiusMinMax: {x: 1.5, y: 5}
+  distanceRadius: 1000
+  starRadiusMinMax: {x: 1, y: 3.5}
   starRadiusDistribution: 0.5
   starMaterial: {fileID: 2100000, guid: 7d23b3bfd35c98f4f99720e8f4236c50, type: 2}
   spectrum:

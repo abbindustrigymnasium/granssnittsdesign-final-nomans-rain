@@ -695,21 +695,22 @@ static void _fnlTransformDomainWarpCoordinate3D(fnl_state state, inout FNLfloat 
     }
     break;
     default:
-        switch (state.domain_warp_type)
-        {
-        case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-        case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-        {
+        //switch (state.domain_warp_type)
+        //{
+        //case FNL_DOMAIN_WARP_OPENSIMPLEX2:
+        //case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
+        //{
             const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
             FNLfloat r = (x + y + z) * R3; // Rotation, not skew
             x = r - x;
             y = r - y;
             z = r - z;
-        }
-        break;
-        default:
-            break;
-        }
+			break;
+        //}
+        //break;
+        //default:
+        //   break;
+        //}
     }
 }
 
@@ -1782,16 +1783,342 @@ static void _fnlDoSingleDomainWarp2D(fnl_state state, int seed, float amp, float
 
 static void _fnlDoSingleDomainWarp3D(fnl_state state, int seed, float amp, float freq, FNLfloat x, FNLfloat y, FNLfloat z, inout FNLfloat xp, inout FNLfloat yp, inout FNLfloat zp)
 {
+	float warpAmp;
+	float frequency;
+
+	int i;
+	int j;
+	int k;
+
+	float x0;
+	float y0;
+	float z0;
+
+
+	int xNSign;
+	int yNSign;
+	int zNSign;
+
+	float ax0;
+	float ay0;
+	float az0;
+
+	float vx, vy, vz;
+
+	float a;
+
+	float aaaa;
+
+	float xo, yo, zo;
+
+	float b;
+
+	int i1;
+	int j1;
+	int k1;
+
+	float x1;
+	float y1;
+	float z1;
+
+	float bbbb;
+	//float xo, yo, zo;
+
     switch (state.domain_warp_type)
     {
     case FNL_DOMAIN_WARP_OPENSIMPLEX2:
-        _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false);
+		warpAmp = amp * 32.69428253173828125f;
+		frequency = freq;
+		x *= frequency;
+		y *= frequency;
+		z *= frequency;
+
+		/*
+			* --- Rotation moved to TransformDomainWarpCoordinate method ---
+			* const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
+			* FNLfloat r = (x + y + z) * R3; // Rotation, not skew
+			* x = r - x; y = r - y; z = r - z;
+			*/
+
+		i = _fnlFastRound(x);
+		j = _fnlFastRound(y);
+		k = _fnlFastRound(z);
+		x0 = (float)x - i;
+		y0 = (float)y - j;
+		z0 = (float)z - k;
+
+		xNSign = (int)(-x0 - 1.0f) | 1;
+		yNSign = (int)(-y0 - 1.0f) | 1;
+		zNSign = (int)(-z0 - 1.0f) | 1;
+
+		ax0 = xNSign * -x0;
+		ay0 = yNSign * -y0;
+		az0 = zNSign * -z0;
+
+		i *= PRIME_X;
+		j *= PRIME_Y;
+		k *= PRIME_Z;
+
+		vx = vy = vz = 0;
+
+		a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0);
+		for (int l = 0; l < 2; l++)
+		{
+			if (a > 0)
+			{
+				aaaa = (a * a) * (a * a);
+				if (false)
+					_fnlGradCoordOut3D(seed, i, j, k, xo, yo, zo);
+				else
+					_fnlGradCoordDual3D(seed, i, j, k, x0, y0, z0, xo, yo, zo);
+				vx += aaaa * xo;
+				vy += aaaa * yo;
+				vz += aaaa * zo;
+			}
+
+			b = a + 1;
+			i1 = i;
+			j1 = j;
+			k1 = k;
+			x1 = x0;
+			y1 = y0;
+			z1 = z0;
+			if (ax0 >= ay0 && ax0 >= az0)
+			{
+				x1 += xNSign;
+				b -= xNSign * 2 * x1;
+				i1 -= xNSign * PRIME_X;
+			}
+			else if (ay0 > ax0 && ay0 >= az0)
+			{
+				y1 += yNSign;
+				b -= yNSign * 2 * y1;
+				j1 -= yNSign * PRIME_Y;
+			}
+			else
+			{
+				z1 += zNSign;
+				b -= zNSign * 2 * z1;
+				k1 -= zNSign * PRIME_Z;
+			}
+
+			if (b > 0)
+			{
+				bbbb = (b * b) * (b * b);
+				if (false)
+					_fnlGradCoordOut3D(seed, i1, j1, k1, xo, yo, zo);
+				else
+					_fnlGradCoordDual3D(seed, i1, j1, k1, x1, y1, z1, xo, yo, zo);
+				vx += bbbb * xo;
+				vy += bbbb * yo;
+				vz += bbbb * zo;
+			}
+
+			if (l == 1)
+				break;
+
+			ax0 = 0.5f - ax0;
+			ay0 = 0.5f - ay0;
+			az0 = 0.5f - az0;
+
+			x0 = xNSign * ax0;
+			y0 = yNSign * ay0;
+			z0 = zNSign * az0;
+
+			a += (0.75f - ax0) - (ay0 + az0);
+
+			i += (xNSign >> 1) & PRIME_X;
+			j += (yNSign >> 1) & PRIME_Y;
+			k += (zNSign >> 1) & PRIME_Z;
+
+			xNSign = -xNSign;
+			yNSign = -yNSign;
+			zNSign = -zNSign;
+
+			seed += 1293373;
+		}
+
+		xp += vx * warpAmp;
+		yp += vy * warpAmp;
+		zp += vz * warpAmp;
+
+        //_fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 32.69428253173828125f, freq, x, y, z, xp, yp, zp, false);
         break;
     case FNL_DOMAIN_WARP_OPENSIMPLEX2_REDUCED:
-        _fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 7.71604938271605f, freq, x, y, z, xp, yp, zp, true);
+		warpAmp = amp * 7.71604938271605f;
+		frequency = freq;
+		x *= frequency;
+		y *= frequency;
+		z *= frequency;
+
+		/*
+			* --- Rotation moved to TransformDomainWarpCoordinate method ---
+			* const FNLfloat R3 = (FNLfloat)(2.0 / 3.0);
+			* FNLfloat r = (x + y + z) * R3; // Rotation, not skew
+			* x = r - x; y = r - y; z = r - z;
+			*/
+
+		i = _fnlFastRound(x);
+		j = _fnlFastRound(y);
+		k = _fnlFastRound(z);
+		x0 = (float)x - i;
+		y0 = (float)y - j;
+		z0 = (float)z - k;
+
+		xNSign = (int)(-x0 - 1.0f) | 1;
+		yNSign = (int)(-y0 - 1.0f) | 1;
+		zNSign = (int)(-z0 - 1.0f) | 1;
+
+		ax0 = xNSign * -x0;
+		ay0 = yNSign * -y0;
+		az0 = zNSign * -z0;
+
+		i *= PRIME_X;
+		j *= PRIME_Y;
+		k *= PRIME_Z;
+
+		vx = vy = vz = 0;
+
+		a = (0.6f - x0 * x0) - (y0 * y0 + z0 * z0);
+		for (int lq = 0; lq < 2; lq++)
+		{
+			if (a > 0)
+			{
+				aaaa = (a * a) * (a * a);
+				if (true)
+					_fnlGradCoordOut3D(seed, i, j, k, xo, yo, zo);
+				else
+					_fnlGradCoordDual3D(seed, i, j, k, x0, y0, z0, xo, yo, zo);
+				vx += aaaa * xo;
+				vy += aaaa * yo;
+				vz += aaaa * zo;
+			}
+
+			b = a + 1;
+			i1 = i;
+			j1 = j;
+			k1 = k;
+			x1 = x0;
+			y1 = y0;
+			z1 = z0;
+			if (ax0 >= ay0 && ax0 >= az0)
+			{
+				x1 += xNSign;
+				b -= xNSign * 2 * x1;
+				i1 -= xNSign * PRIME_X;
+			}
+			else if (ay0 > ax0 && ay0 >= az0)
+			{
+				y1 += yNSign;
+				b -= yNSign * 2 * y1;
+				j1 -= yNSign * PRIME_Y;
+			}
+			else
+			{
+				z1 += zNSign;
+				b -= zNSign * 2 * z1;
+				k1 -= zNSign * PRIME_Z;
+			}
+
+			if (b > 0)
+			{
+				bbbb = (b * b) * (b * b);
+				if (true)
+					_fnlGradCoordOut3D(seed, i1, j1, k1, xo, yo, zo);
+				else
+					_fnlGradCoordDual3D(seed, i1, j1, k1, x1, y1, z1, xo, yo, zo);
+				vx += bbbb * xo;
+				vy += bbbb * yo;
+				vz += bbbb * zo;
+			}
+
+			if (lq == 1)
+				break;
+
+			ax0 = 0.5f - ax0;
+			ay0 = 0.5f - ay0;
+			az0 = 0.5f - az0;
+
+			x0 = xNSign * ax0;
+			y0 = yNSign * ay0;
+			z0 = zNSign * az0;
+
+			a += (0.75f - ax0) - (ay0 + az0);
+
+			i += (xNSign >> 1) & PRIME_X;
+			j += (yNSign >> 1) & PRIME_Y;
+			k += (zNSign >> 1) & PRIME_Z;
+
+			xNSign = -xNSign;
+			yNSign = -yNSign;
+			zNSign = -zNSign;
+
+			seed += 1293373;
+		}
+
+		xp += vx * warpAmp;
+		yp += vy * warpAmp;
+		zp += vz * warpAmp;
+
+        //_fnlSingleDomainWarpOpenSimplex2Gradient(seed, amp * 7.71604938271605f, freq, x, y, z, xp, yp, zp, true);
         break;
     case FNL_DOMAIN_WARP_BASICGRID:
-        _fnlSingleDomainWarpBasicGrid3D(seed, amp, freq, x, y, z, xp, yp, zp);
+	    FNLfloat xf = x * frequency;
+		FNLfloat yf = y * frequency;
+		FNLfloat zf = z * frequency;
+
+		int x0q = _fnlFastFloor(xf);
+		int y0q = _fnlFastFloor(yf);
+		int z0q = _fnlFastFloor(zf);
+
+		float xs = _fnlInterpHermite((float)(xf - x0q));
+		float ys = _fnlInterpHermite((float)(yf - y0q));
+		float zs = _fnlInterpHermite((float)(zf - z0q));
+
+		x0q *= PRIME_X;
+		y0q *= PRIME_Y;
+		z0q *= PRIME_Z;
+		int x1q = x0q + PRIME_X;
+		int y1q = y0q + PRIME_Y;
+		int z1q = z0q + PRIME_Z;
+
+		int idx0 = _fnlHash3D(seed, x0q, y0q, z0q) & (255 << 2);
+		int idx1 = _fnlHash3D(seed, x1q, y0q, z0q) & (255 << 2);
+
+		float lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
+		float ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
+		float lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+
+		idx0 = _fnlHash3D(seed, x0q, y1q, z0q) & (255 << 2);
+		idx1 = _fnlHash3D(seed, x1q, y1q, z0q) & (255 << 2);
+
+		float lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
+		float ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
+		float lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+
+		float lx0y = _fnlLerp(lx0x, lx1x, ys);
+		float ly0y = _fnlLerp(ly0x, ly1x, ys);
+		float lz0y = _fnlLerp(lz0x, lz1x, ys);
+
+		idx0 = _fnlHash3D(seed, x0q, y0q, z1q) & (255 << 2);
+		idx1 = _fnlHash3D(seed, x1q, y0q, z1q) & (255 << 2);
+
+		lx0x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
+		ly0x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
+		lz0x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+
+		idx0 = _fnlHash3D(seed, x0q, y1q, z1q) & (255 << 2);
+		idx1 = _fnlHash3D(seed, x1q, y1q, z1q) & (255 << 2);
+
+		lx1x = _fnlLerp(RAND_VECS_3D[idx0], RAND_VECS_3D[idx1], xs);
+		ly1x = _fnlLerp(RAND_VECS_3D[idx0 | 1], RAND_VECS_3D[idx1 | 1], xs);
+		lz1x = _fnlLerp(RAND_VECS_3D[idx0 | 2], RAND_VECS_3D[idx1 | 2], xs);
+
+		xp += _fnlLerp(lx0y, _fnlLerp(lx0x, lx1x, ys), zs) * warpAmp;
+		yp += _fnlLerp(ly0y, _fnlLerp(ly0x, ly1x, ys), zs) * warpAmp;
+		zp += _fnlLerp(lz0y, _fnlLerp(lz0x, lz1x, ys), zs) * warpAmp;
+
+        //_fnlSingleDomainWarpBasicGrid3D(seed, amp, freq, x, y, z, xp, yp, zp);
         break;
     }
 }

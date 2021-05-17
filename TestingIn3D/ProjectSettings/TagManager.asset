@@ -16,17 +16,17 @@ TagManager:
   - 
   - Player
   - CelestialBody
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - CelestialBody0
+  - CelestialBody1
+  - CelestialBody2
+  - CelestialBody3
+  - CelestialBody4
+  - CelestialBody5
+  - CelestialBody6
+  - CelestialBody7
+  - CelestialBody8
+  - CelestialBody9
+  - Enemy
   - 
   - 
   - 
